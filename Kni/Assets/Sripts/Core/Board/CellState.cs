@@ -7,8 +7,8 @@ namespace Assets.Sripts.Core.Board
 {
     public enum CellState
     {
-        Empty = 0,
+        Black = 0,
         White = 1,
-        Black = 2
+		Empty = 2
     }
 }
