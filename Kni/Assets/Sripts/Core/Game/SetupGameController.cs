@@ -31,14 +31,25 @@ namespace Assets.Sripts.Core.Game
             throw new NotImplementedException();
         }
 
+
 		//Setup logic
-		public bool checkForSquaresContaining(int i, int j, List<CellCoordinates> stones)
+		public bool checkForSquaresContaining(int nextCellToConsider, List<CellCoordinates> stones, CellCoordinates[] toCheck, int numberStones)
 		{
-			//post: returns if a stone of the player can be placed in cell (i, j) 
-			//TODO
-			int totalStonesOfPlayer = 0;
-			
-			return false;
+			//post: returns if a stone of the player can be placed in cell (i, j) which was added first to toCheck list
+			bool canPlace = true;
+			if(numberStones > 1) {
+				//if n elements of toCheck are in a n * n square
+				;
+			}
+
+			for (int i = nextCellToConsider; i < stones.Count; i++) 
+			{
+				toCheck[numberStones].setToCoordinates(stones[i]);
+				canPlace &= checkForSquaresContaining(i + 1, stones, toCheck, numberStones + 1);
+			}
+			return canPlace;
+
+
 		}
 		
 		public bool[,] PossiblePositions(CellState[,] board, Player player)
@@ -50,8 +61,10 @@ namespace Assets.Sripts.Core.Game
 			List<CellCoordinates> stones = new List<CellCoordinates> (); //stones of same color
 			bool[,] canBePlaced = new bool[width, height];
 			
-			for (int i = 0; i < width; i++) {
-				for (int j = 0; j < height; j++) {
+			for (int i = 0; i < width; i++)
+			{
+				for (int j = 0; j < height; j++) 
+				{
 					
 					if((int)board[i, j] != 2) // Empty
 					{
@@ -70,14 +83,22 @@ namespace Assets.Sripts.Core.Game
 					
 				}
 			}
-			
+
+			//will store stones which are checked if they belong to the same square
+			CellCoordinates[] toCheck = new CellCoordinates[stones.Count + 1];
+
+
 			for (int i = 0; i < width; i++)
 			{
 				for(int j = 0; j < width; j++)
 				{
-					if(canBePlaced[i,j])
+					if(canBePlaced[i, j])
+					{
+						toCheck[0].setXY(i, j);
 						canBePlaced[i, j] 
-						= checkForSquaresContaining(i, j, stones);
+						= checkForSquaresContaining(0, stones, toCheck, 1);
+					}
+						
 				}
 			}
 			
