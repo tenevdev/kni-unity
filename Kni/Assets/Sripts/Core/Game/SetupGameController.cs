@@ -35,7 +35,9 @@ namespace Assets.Sripts.Core.Game
 		//Setup logic
 		public bool checkForSquaresContaining(int nextCellToConsider, List<CellCoordinates> stones, CellCoordinates[] toCheck, int numberStones)
 		{
-			//post: returns if a stone of the player can be placed in cell (i, j) which was added first to toCheck list
+			//post: returns if a stone of the player can be placed in cell (i, j)
+			//the cell's coordinates where added to toCheck when calling the function
+
 			bool canPlace = true;
 			if(numberStones > 1) {
 				//if n elements of toCheck are in a n * n square
@@ -49,7 +51,6 @@ namespace Assets.Sripts.Core.Game
 			}
 			return canPlace;
 
-
 		}
 		
 		public bool[,] PossiblePositions(CellState[,] board, Player player)
@@ -58,20 +59,20 @@ namespace Assets.Sripts.Core.Game
 			int width = board.GetLength (0);
 			int height = board.GetLength (1);
 			
-			List<CellCoordinates> stones = new List<CellCoordinates> (); //stones of same color
+			List<CellCoordinates> stones = new List<CellCoordinates> (); //stones of player's color
 			bool[,] canBePlaced = new bool[width, height];
 			
 			for (int i = 0; i < width; i++)
 			{
 				for (int j = 0; j < height; j++) 
 				{
-					
+
+					canBePlaced[i, j] = false;
 					if((int)board[i, j] != 2) // Empty
 					{
-						canBePlaced[i, j] = false;
 						continue;
 					}
-					canBePlaced[i, j] = false;
+
 					if((int)board[i, j] == (int)player)
 					{
 						stones.Add(new CellCoordinates(i, j));
@@ -80,17 +81,15 @@ namespace Assets.Sripts.Core.Game
 					{
 						canBePlaced[i, j] = true;
 					}
-					
 				}
 			}
 
 			//will store stones which are checked if they belong to the same square
 			CellCoordinates[] toCheck = new CellCoordinates[stones.Count + 1];
 
-
 			for (int i = 0; i < width; i++)
 			{
-				for(int j = 0; j < width; j++)
+				for(int j = 0; j < height; j++)
 				{
 					if(canBePlaced[i, j])
 					{
