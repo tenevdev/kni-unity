@@ -33,23 +33,42 @@ namespace Assets.Sripts.Core.Game
 
 
 		//Setup logic
-		public bool checkForSquaresContaining(int nextCellToConsider, List<CellCoordinates> stones, CellCoordinates[] toCheck, int numberStones)
+		public bool checkForSquaresContaining(int nextCellToConsider, List<CellCoordinates> stones, CellCoordinates[] toCheck, int numberOfStones)
 		{
 			//post: returns if a stone of the player can be placed in cell (i, j)
 			//the cell's coordinates where added to toCheck when calling the function
 
-			bool canPlace = true;
-			if(numberStones > 1) {
+			if(numberOfStones > 1) {
 				//if n elements of toCheck are in a n * n square
-				;
+				//way to do it is: get maxX, minX, maxY, minY coordinates
+				//check if the rectangle they form is at most n * n
+				//in that case return false
+
+				int minX, maxX, minY, maxY;
+				minX = maxX = toCheck[0].getX();
+				minY = maxY = toCheck[0].getY();
+
+				for(int i = 1; i < toCheck.Length; i++)
+				{
+					minX = (toCheck[i].getX() < minX) ? toCheck[i].getX() : minX ;
+					maxX = (toCheck[i].getX() > maxX) ? toCheck[i].getX() : maxX ;
+					minY = (toCheck[i].getY() < minY) ? toCheck[i].getY() : minY ;
+					maxY = (toCheck[i].getY() > maxY) ? toCheck[i].getY() : maxY ;
+				}
+
+				int height = maxY - minY + 1;
+				int width = maxX - minX + 1;
+				if(height <= numberOfStones && width <= numberOfStones)
+					return false;
 			}
 
 			for (int i = nextCellToConsider; i < stones.Count; i++) 
 			{
-				toCheck[numberStones].setToCoordinates(stones[i]);
-				canPlace &= checkForSquaresContaining(i + 1, stones, toCheck, numberStones + 1);
+				toCheck[numberOfStones].setToCoordinates(stones[i]);
+				if(!checkForSquaresContaining(i + 1, stones, toCheck, numberOfStones + 1))
+					return false;
 			}
-			return canPlace;
+			return true;
 
 		}
 		
