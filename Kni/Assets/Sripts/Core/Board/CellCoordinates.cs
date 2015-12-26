@@ -5,35 +5,30 @@ using System.Text;
 
 namespace Assets.Sripts.Core.Board
 {
+    /// <summary>
+    /// It might be a good idea to use the built-in Vector2 from Unity.
+    /// I am not exactly sure about the purpose of this class.
+    /// </summary>
 	public class CellCoordinates
 	{
-		private int x, y;
-		public CellCoordinates (int x,int y)
+        /// <summary>
+        /// Initialise a cell position on given coordinates
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+		public CellCoordinates (int x, int y)
 		{
-			this.x = x;
-			this.y = y;
+			this.X = x;
+			this.Y = y;
 		}
 
-		public int getX()
-		{
-			return this.x;
-		}
+        public int X { get; set; }
+        public int Y { get; set; }
 
-		public int getY()
+        public void setToCoordinates(CellCoordinates coords)
 		{
-			return this.y;
-		}
-
-		public void setXY(int x, int y)
-		{
-			this.x = x;
-			this.y = y;
-		}
-
-		public void setToCoordinates(CellCoordinates xy)
-		{
-			this.x = xy.getX();
-			this.y = xy.getY();
+            X = coords.X;
+            Y = coords.Y;
 		}
 
 	}
